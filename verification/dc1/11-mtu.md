@@ -17,7 +17,6 @@
 | 7 | Border Leaf1·2 | `show ip ospf neighbor`, `show ip bgp summary vrf TENANT-A` | OSPF 이웃 2개 FULL, Hub eBGP Established |
 | 8 | DSW1·2, CX1·2 | `show ip interface vlan 50 \| include MTU` (vlan 60), CX는 `show ip interface vlan110` | MTU 1400 |
 | 9 | 경로 MTU | `ping -M do -c 3 -s 1372 <대상>`, `-s 1373` | 1372(패킷 1400바이트)는 응답, 1373(1401바이트)은 `Frag needed and DF set (mtu = 1400)` |
-| 10 | TCP | `iperf3 -c <대상> -t 10 -b 5M` | 데이터 전달 여부 확인 |
 
 ## 증빙
 
@@ -113,18 +112,9 @@ PE마다 `mtu 4470`이 두 코어 인터페이스(`Gi0/0`, `Gi1/0`)에 들어가
 ![Host F ping 1372, 1373](images/11-mtu/host-f-ping-1372-1373.png)
 ![Host E ping 1372, 1373](images/11-mtu/host-e-ping-1372-1373.png)
 
-### TCP (항목 10)
-
-- Host F -> Host C `iperf3 -c 192.168.30.101 -t 10 -b 5M`: 연결은 성립하지만 대부분 구간이 `0.00 Bytes`이고 재전송(Retr)이 계속 나옴. 합계는 sender 128KBytes(105Kbits/sec, Retr 44), receiver 85.6KBytes(68.6Kbits/sec)
-- 같은 증상이 MTU 변경 전에도 있었고(경로 MTU와 무관하게 TCP 데이터가 전달되지 않음) 원인은 확인하지 못함. MSS 클램핑 효과도 이 환경에서는 확인하지 못함
-
-![Host F iperf3](images/11-mtu/host-f-iperf3-client.png)
-![Host C iperf3 서버](images/11-mtu/host-c-iperf3-server.png)
-
 ## 결과 기록
 
 | 일시 | 구간 | 결과 | 비고 |
 |---|---|---|---|
 | 2026-11-14 | 코어 PE, DC1 패브릭, DSW·CX SVI | 성공 | MTU 값 적용과 OSPF·LDP·BGP·EVPN·MLAG 유지 확인, 4000바이트 df-bit ping 5/5, 경로 MTU 1400 확인 |
-| 2026-11-14 | DSW MSS 클램핑(`adjust-mss 1360`) | 적용 확인 | DSW1·DSW2 vlan 50·60 running-config. SYN 패킷의 MSS 값은 캡처로 확인하지 않음 |
-| 2026-11-14 | TCP(iperf3) | 실패(원인 미확인) | MTU와 무관하게 데이터가 전달되지 않음 |
+| 2026-11-14 | DSW MSS 클램핑(`adjust-mss 1360`) | 적용 확인 | DSW1·DSW2 vlan 50·60 running-config. SYN-ACK의 MSS가 1360으로 보임(Wireshark, Host F 쪽 링크) |

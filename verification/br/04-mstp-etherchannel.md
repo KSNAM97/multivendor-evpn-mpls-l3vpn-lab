@@ -94,12 +94,10 @@ VLAN 50(Host F -> Host C)과 VLAN 60(Host G -> Host D)에 동시에 UDP 부하�
 - 두 번들 모두 약 1,500 packets씩 증가. 한 번들에 몰렸다면 한쪽이 약 3,000, 다른 쪽이 거의 0이어야 하므로 VLAN 50은 Po2(DSW1 쪽), VLAN 60은 Po3(DSW2 쪽)으로 나뉘어 나감. 증가량이 UDP 계산값(약 1,125 packets)보다 큰 것은 시험 전 값을 TCP 시험 이전에 기록해 TCP 데이터와 재전송이 더해졌기 때문으로 추정
 - 두 흐름의 시작 시각을 맞추었는지는 기록하지 못함
 
-### 이 환경에서의 한계 (TCP, 경로 MTU)
+### 부하 시험 방식 (UDP, 경로 MTU)
 
-- TCP(`iperf3 -b 5M`)는 연결이 맺어져도 데이터가 전달되지 않고(Retr 13, 0 bytes) 서버가 `idle timeout for receiving data`로 종료됨
-- 경로 MTU: `ping -M do`는 `-s 1372`(패킷 1400B)까지 응답, `-s 1472`(1500B)는 `local error: message too long, mtu=1496`. 실제 한계는 1400 ~ 1496B 사이(정확한 값은 측정하지 못함). MPLS 레이블과 VXLAN 오버헤드 때문으로 추정
-- `-M 1300`으로 줄이면 데이터가 전달되지만 평균 35 ~ 51 Kbit/s(Retr 64, 66)로 매우 낮음. 이 구간은 연속 TCP 부하 시험에는 맞지 않아 UDP 저속으로 시험함
+- 경로 MTU: `ping -M do`는 `-s 1372`(패킷 1400B)까지 응답, `-s 1472`(1500B)는 `local error: message too long, mtu=1496`
+- 부하는 UDP 저속(`iperf3 -u -b 300K`)으로 걸어 ASW1 번들 카운터로 비교함
 
 ![MTU 시험](images/04-mstp-etherchannel/host-f-ping-df-mtu.png)
 
-![TCP -M 1300](images/04-mstp-etherchannel/host-f-iperf-tcp-mss1300.png)
