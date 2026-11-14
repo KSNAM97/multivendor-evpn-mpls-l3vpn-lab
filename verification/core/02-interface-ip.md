@@ -115,10 +115,10 @@ show ip interface gigabitethernet 3/0 | include Internet address|VPN Routing|MTU
 
 ### PE3
 
-- `show ip interface brief`: loopback0 10.0.0.13, Gi0/0 10.0.10.3(PE1), Gi1/0 10.0.10.5(PE2), Gi2/0 10.0.60.0(BGW1), Gi3/0 10.0.60.2(BGW2), 관리 Gi6/0 10.9.1.13이 up/up. 서브인터페이스 `Gi2/0.100`, `Gi3/0.100`이 `deleted`로 보이는 것은 삭제한 서브인터페이스를 IOS가 재부팅 전까지 목록에 남기는 표시
+- `show ip interface brief`: loopback0 10.0.0.13, Gi0/0 10.0.10.3(PE1), Gi1/0 10.0.10.5(PE2), Gi2/0 10.0.60.0(BGW1), Gi3/0 10.0.60.2(BGW2), 관리 Gi6/0 10.9.1.13이 up/up. 서브인터페이스 목록은 없음(PE3 재부팅 후 화면)
 - `show ip vrf interfaces`: Gi2/0, Gi3/0이 BR1, Gi6/0이 MGMT
 - PE3의 BGW 링크는 PE1(Hub), PE2(CX)와 같이 물리 포트에 주소와 VRF를 직접 줌. 처음에는 dot1q 100 서브인터페이스(`.100`)로 구성했으나 쓸 이유가 없어 2026-11-14에 물리 포트로 통일(BGW1·2 `Gi0/0`도 같음)
-- 변경 뒤 확인: PE3 BGP 이웃 BGW1(10.0.60.1), BGW2(10.0.60.3) Established, BGW1·2의 PE3 이웃 Established, Host F -> Host A ping 4/4(TTL 57). BGP Up/Down이 약 6시간으로 이어져 세션은 끊기지 않았음
+- 변경 뒤 확인(PE3 재부팅 후): PE3 BGP 이웃 PE1, PE2, BGW1(10.0.60.1), BGW2(10.0.60.3) Established(Up/Down 약 20초, 재부팅으로 세션이 새로 수립됨), BGW1·2의 PE3 이웃 Established, Host F -> Host A ping 4/4(TTL 57, 재부팅 전 화면)
 
 ![PE3 인터페이스 IP](images/02-interface-ip/pe3-interface-ip.png)
 
