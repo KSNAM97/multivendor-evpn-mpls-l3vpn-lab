@@ -138,7 +138,7 @@ OSPF, BGP, LACP의 협상 조건은 **DC1 기준으로 전 구간을 통일**. �
 | 코어 PE 간 링크 (PE1~PE3 `Gi0/0`, `Gi1/0`) | `mtu` | **4470** | c7200 이미지가 허용하는 최대값(`<1500-4470>`). `mpls mtu`는 인터페이스 MTU를 따라 4470으로 보임 |
 | DC1 SVI (leaf vlan 10·20·30·99) | `mtu` | **1400** | 단말 패킷이 코어 오버헤드를 더해도 1500 안에 들어오게 제한 |
 | Branch SVI (DSW1·DSW2 vlan 50·60) | `ip mtu` | **1400** | 위와 같음 |
-| Branch SVI (DSW1·DSW2 vlan 50·60) | `ip tcp adjust-mss` | 1360 (설계값) | 1400 - IPv4 헤더 20 - TCP 헤더 20. SYN 단계에서 MSS를 낮추는 설정. DSW에서 `show run \| include adjust-mss` 출력이 없어 **적용은 확인하지 못함** |
+| Branch SVI (DSW1·DSW2 vlan 50·60) | `ip tcp adjust-mss` | **1360** | 1400 - IPv4 헤더 20 - TCP 헤더 20. SYN 단계에서 MSS를 낮춤. DSW1·DSW2 running-config에서 적용 확인 |
 | DC2 SVI (CX1·CX2 vlan 110) | `ip mtu` | **1400** | 위와 같음 |
 | Hub, BGW, PE-CE 링크 | (변경 없음) | 1500 | OSPF가 없는 링크라 이번에 바꾸지 않음 |
 

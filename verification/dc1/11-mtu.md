@@ -91,14 +91,16 @@ PE마다 `mtu 4470`이 두 코어 인터페이스(`Gi0/0`, `Gi1/0`)에 들어가
 ### 개발지사 DSW와 DC2 CX (항목 8)
 
 - DSW1·DSW2: vlan 50, vlan 60 모두 `MTU is 1400 bytes`
-- `show run | include adjust-mss`를 DSW1·DSW2에서 실행했지만 **출력이 없음**. `ip tcp adjust-mss 1360`이 running-config에 보이지 않아 MSS 클램핑은 적용을 확인하지 못함
+- DSW1·DSW2 `show running-config interface vlan 50`, `vlan 60`에 `ip mtu 1400`과 `ip tcp adjust-mss 1360`이 모두 있음(처음 `show run | include adjust-mss`로 찾았을 때는 출력이 없었으나, 인터페이스 설정을 직접 보니 적용되어 있음)
 - CX1·CX2: `show ip interface vlan110`에서 `IP MTU 1400`(active-gateway 192.168.110.1, 장비 주소 .2, .3)
 
 ![DSW1 vlan 50](images/11-mtu/dsw1-vlan50-mtu.png)
 ![DSW1 vlan 60](images/11-mtu/dsw1-vlan60-mtu.png)
 ![DSW2 vlan 50](images/11-mtu/dsw2-vlan50-mtu.png)
 ![DSW2 vlan 60](images/11-mtu/dsw2-vlan60-mtu.png)
-![DSW1 adjust-mss 검색](images/11-mtu/dsw1-adjust-mss.png)
+![DSW1 vlan 50·60 설정](images/11-mtu/dsw1-vlan50-60-run.png)
+
+![DSW2 vlan 50·60 설정](images/11-mtu/dsw2-vlan50-60-run.png)
 ![CX1 vlan110](images/11-mtu/cx1-vlan110-mtu.png)
 ![CX2 vlan110](images/11-mtu/cx2-vlan110-mtu.png)
 
@@ -124,5 +126,5 @@ PE마다 `mtu 4470`이 두 코어 인터페이스(`Gi0/0`, `Gi1/0`)에 들어가
 | 일시 | 구간 | 결과 | 비고 |
 |---|---|---|---|
 | 2026-11-14 | 코어 PE, DC1 패브릭, DSW·CX SVI | 성공 | MTU 값 적용과 OSPF·LDP·BGP·EVPN·MLAG 유지 확인, 4000바이트 df-bit ping 5/5, 경로 MTU 1400 확인 |
-| 2026-11-14 | DSW MSS 클램핑(`adjust-mss 1360`) | 미확인 | `show run | include adjust-mss` 출력 없음 |
+| 2026-11-14 | DSW MSS 클램핑(`adjust-mss 1360`) | 적용 확인 | DSW1·DSW2 vlan 50·60 running-config. SYN 패킷의 MSS 값은 캡처로 확인하지 않음 |
 | 2026-11-14 | TCP(iperf3) | 실패(원인 미확인) | MTU와 무관하게 데이터가 전달되지 않음 |
