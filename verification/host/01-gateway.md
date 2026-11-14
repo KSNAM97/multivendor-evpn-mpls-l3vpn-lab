@@ -8,9 +8,10 @@
 
 | 순서 | 호스트 | 명령 | 기대 결과 | 안 될 때 확인 |
 |---|---|---|---|---|
-| 1 | Host A | `ip -br link`, `ping -c 3 192.168.10.1` | `bond0`이 UP, 게이트웨이 3개 응답 | bond 설정, leaf1·2 `Vlan10` up, `port-channel10` |
-| 2 | Host B | `ip -br addr`, `ping -c 3 192.168.10.1` | `eth0 192.168.10.102/24`, 응답 | leaf3 `ethernet7` access VLAN 10, `Vlan10` |
-| 3 | Host C | `ip -br addr`, `ping -c 3 192.168.20.1` | `eth0 192.168.20.101/24`, 응답 | leaf4 `ethernet7` access VLAN 20, `Vlan20` |
+| 1 | Host A | `ip -br addr`, `ping -c 3 192.168.10.1` | `eth0 192.168.10.101/24`, 응답 | leaf1 `ethernet5` access VLAN 10, `Vlan10` |
+| 2 | Host B | `ip -br addr`, `ping -c 3 192.168.20.1` | `eth0 192.168.20.101/24`, 응답 | leaf2 `ethernet5` access VLAN 20, `Vlan20` |
+| 3 | Host C | `ip -br addr`, `ping -c 3 192.168.30.1` | `eth0 192.168.30.101/24`, 응답 | leaf3 `ethernet7` access VLAN 30, `Vlan30` |
+| 3-1 | Host D | `ip -br addr`, `ping -c 3 192.168.99.1` | `eth0 192.168.99.101/24`, 응답 | leaf4 `ethernet7` access VLAN 99, `Vlan99` |
 | 4 | Host E | `ping -c 3 192.168.110.1` | 응답 (VSX active gateway) | CX3 `1/1/5` VLAN 110, CX1·2 active gateway |
 | 5 | Host F | `ping -c 3 192.168.50.1` | 응답 (VRRP VIP) | ASW1 `Gi1/0` VLAN 50, DSW1 VRRP master |
 | 6 | Host G | `ping -c 3 192.168.60.1` | 응답 (VRRP VIP) | ASW1 `Gi1/1` VLAN 60, DSW2 VRRP master |
@@ -18,14 +19,14 @@
 - 호스트 이름 `eth0`이 `UNKNOWN`으로 표시되는 것은 컨테이너 가상 인터페이스의 정상 표시
 - 한글 주석이 콘솔에서 깨져 보이는 것은 콘솔이 UTF-8을 표시하지 못해서이며 동작에는 영향이 없음
 
-## 증빙 (DC1, 2026-10-22)
+## 증빙 (DC1, 2026-11-14)
 
 | 호스트 | 화면 | 볼 곳 |
 |---|---|---|
-| Host A | ![Host A bond0와 게이트웨이 ping](../dc1/images/02-mlag/host-a-link-ping-gateway.png) | `bond0` MASTER, `eth0`·`eth1` SLAVE UP, `192.168.10.1` 3개 중 3개 응답 |
-| Host B | ![Host B 게이트웨이 ping](../dc1/images/03-evpn-vxlan/host-b-gateway.png) | `eth0 192.168.10.102/24`, 기본 경로 `via 192.168.10.1`, 응답 3/3 |
-| Host C | ![Host C 게이트웨이 ping](../dc1/images/03-evpn-vxlan/host-c-gateway.png) | `eth0 192.168.20.101/24`, 기본 경로 `via 192.168.20.1`, 응답 3/3 |
-| Host B -> VLAN 20 게이트웨이 | ![Host B가 192.168.20.1에 ping](../dc1/images/03-evpn-vxlan/host-b-ping-vlan20-gateway.png) | leaf3의 `Vlan10`과 `Vlan20` SVI 사이 **로컬 VLAN 간 라우팅**(VXLAN 아님) |
+| Host A | ![Host A 게이트웨이 ping](images/01-gateway/host-a-gateway.png) | `eth0 192.168.10.101/24`, `192.168.10.1` 3/3 응답(`eth1`은 주소 없음, 사용하지 않음) |
+| Host B | ![Host B 게이트웨이 ping](images/01-gateway/host-b-gateway.png) | `eth0 192.168.20.101/24`, `192.168.20.1` 3/3 응답 |
+| Host D | ![Host D 게이트웨이 ping](images/01-gateway/host-d-gateway-dc1.png) | `eth0 192.168.99.101/24`, `192.168.99.1` 3/3 응답 |
+| Host C | [VLAN·MSTP 검증](../dc1/07-vlan-mstp.md) | `192.168.30.1` 3/3 응답(해당 문서의 화면) |
 
 ## 증빙 (DC2, Branch, 2026-10-23)
 

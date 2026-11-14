@@ -9,8 +9,7 @@
 | 순서 | 구간 | 출발 -> 대상 | 명령 | 기대 결과 | 안 될 때 확인 |
 |---|---|---|---|---|---|
 | 1 | 게이트웨이 | 각 호스트 -> 게이트웨이 | [게이트웨이 연결 검증](01-gateway.md) | 응답 | 해당 지역 SVI |
-| 2 | 같은 VLAN (L2VNI) | Host A -> Host B | `ping -c 3 192.168.10.102` | 응답 (VNI 10010) | [EVPN 검증](../dc1/03-evpn-vxlan.md)의 항목 3 ~ 6 |
-| 3 | 다른 VLAN (L3VNI) | Host A -> Host C | `ping -c 3 192.168.20.101` | 응답 (VNI 50001, VRF TENANT-A) | L3VNI, RT, SVI |
+| 2 | 다른 VLAN (L3VNI) | Host A -> Host C | `ping -c 4 192.168.30.101` | 응답 (VNI 50001, VRF TENANT-A) | L3VNI, RT, SVI |
 | 4 | DC1 -> DC2 | Host A -> Host E | `ping -c 3 192.168.110.101` | **응답 없음**(정상). DC1과 DC2는 분리 | TENANT-A와 PARTNER가 서로의 RT를 import하지 않아야 함 |
 | 5 | DC1 -> Branch | Host A -> Host F | `ping -c 4 192.168.50.101` | 4/4 응답 (leaf, border leaf, Hub, PE1, MPLS L3VPN(VRF BR1), PE3, BGW, DSW 경유) | Hub, PE-CE eBGP, VPNv4 RT |
 | 6 | Branch 내부 | Host F -> Host G | `ping -c 3 192.168.60.101` | 응답 (DSW SVI 간 라우팅) | VRRP, SVI |
@@ -20,11 +19,11 @@
 
 ## 증빙
 
-### Host A -> Host C (항목 3, 2026-10-23)
+### Host A -> Host C (항목 2, 2026-11-14)
 
-- `traceroute -n 192.168.20.101`: 1 **192.168.10.1**(VLAN 10 게이트웨이), 2 **192.168.20.1**(VLAN 20 게이트웨이), 3 192.168.20.101(Host C). 게이트웨이 두 개를 거쳐 VRF TENANT-A 안에서 VLAN 간 라우팅이 됨
+- `ping -c 4 192.168.30.101` 4/4 응답, TTL 62. 자세한 증빙은 [VLAN·MSTP 검증](../dc1/07-vlan-mstp.md), VXLAN 캡처는 [EVPN 검증](../dc1/03-evpn-vxlan.md)
 
-![Host A에서 Host C traceroute](images/03-connectivity/host-a-traceroute-host-c.png)
+![Host A에서 Host C ping](../dc1/images/07-vlan-mstp/host-a-to-c.png)
 
 ### Host A -> Host F (항목 5, 2026-11-07)
 

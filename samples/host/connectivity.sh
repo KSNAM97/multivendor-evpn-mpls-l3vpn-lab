@@ -6,11 +6,8 @@ ip -br addr
 ip route
 ip neigh
 
-# 2. 같은 VLAN (L2VNI): Host A <-> Host B
-ping -c 3 192.168.10.102
-
 # 3. 다른 VLAN (L3VNI): Host A -> Host C
-ping -c 3 192.168.20.101
+ping -c 4 192.168.30.101
 
 # 4. 다른 지역 (DC1 -> DC2): Host A -> Host D. 통신 안 되는 것이 정상 (VRF와 RT, BGW prefix-list로 분리)
 ping -c 3 192.168.110.101
