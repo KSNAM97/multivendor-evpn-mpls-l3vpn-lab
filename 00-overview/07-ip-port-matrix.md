@@ -153,8 +153,8 @@ spine, Cisco 장비, CX에는 Loopback1이 없음(VXLAN이 없음).
 |---|---|---|---|---|
 | Gi0/0 | 코어 | 10.0.10.3/31 | PE1 Gi1/0 (.2) | global |
 | Gi1/0 | 코어 | 10.0.10.5/31 | PE2 Gi1/0 (.4) | global |
-| Gi2/0.100 (dot1q 100) | PE-CE | 10.0.60.0/31 | BGW1 Gi0/0.100 (.1) | BR1 |
-| Gi3/0.100 (dot1q 100) | PE-CE | 10.0.60.2/31 | BGW2 Gi0/0.100 (.3) | BR1 |
+| Gi2/0 | PE-CE | 10.0.60.0/31 | BGW1 Gi0/0 (.1) | BR1 |
+| Gi3/0 | PE-CE | 10.0.60.2/31 | BGW2 Gi0/0 (.3) | BR1 |
 | Gi6/0 | 관리 | 10.9.1.13/24 | MGMT-SW2 Gi0/2 | VRF MGMT (기본 경로 10.9.1.1) |
 
 ## 3. Hub와 Branch
@@ -175,10 +175,10 @@ spine, Cisco 장비, CX에는 Loopback1이 없음(VXLAN이 없음).
 | 장비 | 인터페이스 | 역할 | IP | 상대 |
 |---|---|---|---|---|
 | BGW1 | Loopback0 | router-id | 10.0.0.31/32 | - |
-| BGW1 | Gi0/0.100 (dot1q 100) | PE-CE | 10.0.60.1/31 | PE3 Gi2/0.100 (.0) |
+| BGW1 | Gi0/0 | PE-CE | 10.0.60.1/31 | PE3 Gi2/0 (.0) |
 | BGW1 | Gi1/0 | Branch 연동 | 10.50.0.0/31 | DSW1 Gi0/0 (.1) |
 | BGW2 | Loopback0 | router-id | 10.0.0.32/32 | - |
-| BGW2 | Gi0/0.100 (dot1q 100) | PE-CE | 10.0.60.3/31 | PE3 Gi3/0.100 (.2) |
+| BGW2 | Gi0/0 | PE-CE | 10.0.60.3/31 | PE3 Gi3/0 (.2) |
 | BGW2 | Gi1/0 | Branch 연동 | 10.50.0.2/31 | DSW2 Gi0/0 (.3) |
 
 ### DSW1, DSW2, ASW1 (Branch 스위치)

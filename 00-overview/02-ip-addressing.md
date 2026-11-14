@@ -120,12 +120,12 @@ OSPF router-id는 `loopback0` 주소를 쓰고, **BGP router-id는 별도 대역
 | PE1 Gi2/0 - Hub1 Gi0/0 | 10.0.30.0/31 | PE1 .0 | Hub1 .1 |
 | PE1 Gi5/0 - Hub2 Gi0/0 | 10.0.30.2/31 | PE1 .2 | Hub2 .3 |
 
-**Branch PE-CE (PE 측은 VRF BR1, .100 서브인터페이스, dot1q 100)**
+**Branch PE-CE (PE 측은 VRF BR1)**
 
 | 링크 | 서브넷 | PE측 | BGW측 |
 |---|---|---|---|
-| PE3 Gi2/0.100 - BGW1 Gi0/0.100 | 10.0.60.0/31 | .0 | .1 |
-| PE3 Gi3/0.100 - BGW2 Gi0/0.100 | 10.0.60.2/31 | .2 | .3 |
+| PE3 Gi2/0 - BGW1 Gi0/0 | 10.0.60.0/31 | .0 | .1 |
+| PE3 Gi3/0 - BGW2 Gi0/0 | 10.0.60.2/31 | .2 | .3 |
 
 **Hub 연동 (border leaf 측은 VRF TENANT-A, 1대1 연결)**
 

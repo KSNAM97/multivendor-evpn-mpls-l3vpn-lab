@@ -19,9 +19,9 @@ Hub1, Hub2는 DC1 외부 연결 장비라서 [dc1](../dc1/01-overview.md)에 있
 
 | 노드   | 포트           | 계층                   | 상대 노드  | 상대 포트                        |
 | ---- | ------------ | -------------------- | ------ | ---------------------------- |
-| BGW1 | Gi0/0 (.100) | O (PE-CE, VRF BR1)   | PE3    | Gi2/0 (.100)                 |
+| BGW1 | Gi0/0 | O (PE-CE, VRF BR1)   | PE3    | Gi2/0                 |
 | BGW1 | Gi1/0        | S                    | DSW1   | Gi0/0                        |
-| BGW2 | Gi0/0 (.100) | O (PE-CE, VRF BR1)   | PE3    | Gi3/0 (.100)                 |
+| BGW2 | Gi0/0 | O (PE-CE, VRF BR1)   | PE3    | Gi3/0                 |
 | BGW2 | Gi1/0        | S                    | DSW2   | Gi0/0                        |
 | DSW1 | Gi0/1-2      | S (EtherChannel Po1) | DSW2   | Gi0/1-2                      |
 | DSW1 | Gi0/3, Gi1/0 | S (EtherChannel Po2) | ASW1   | Gi0/0-1                      |
@@ -43,8 +43,8 @@ IOSv의 포트 이름은 4개 단위로 번호가 매겨짐(`Gi0/0 ~ Gi0/3`, `Gi
 
 | 링크                    | 서브넷          | A측      | B측      | 비고                                    |
 | --------------------- | ------------ | ------- | ------- | ------------------------------------- |
-| PE3 - BGW1            | 10.0.60.0/31 | PE3 .0  | BGW1 .1 | VRF BR1, .100 서브인터페이스          |
-| PE3 - BGW2            | 10.0.60.2/31 | PE3 .2  | BGW2 .3 | VRF BR1, .100 서브인터페이스          |
+| PE3 - BGW1            | 10.0.60.0/31 | PE3 .0  | BGW1 .1 | VRF BR1          |
+| PE3 - BGW2            | 10.0.60.2/31 | PE3 .2  | BGW2 .3 | VRF BR1          |
 | BGW1 - DSW1           | 10.50.0.0/31 | BGW1 .0 | DSW1 .1 | OSPF area 0                           |
 | BGW2 - DSW2           | 10.50.0.2/31 | BGW2 .2 | DSW2 .3 | OSPF area 0                           |
 

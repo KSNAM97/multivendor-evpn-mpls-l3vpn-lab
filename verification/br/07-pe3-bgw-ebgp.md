@@ -8,7 +8,7 @@
 
 | 순서 | 장비 | 명령 | 기대 결과 | 안 될 때 확인 |
 |---|---|---|---|---|
-| 1 | BGW1 | `ping 10.0.60.0` (BGW2는 `10.0.60.2`) | PE3 응답 | `Gi0/0.100` 주소, dot1q 100, PE3 서브인터페이스 VRF BR1 |
+| 1 | BGW1 | `ping 10.0.60.0` (BGW2는 `10.0.60.2`) | PE3 응답 | `Gi0/0` 주소, PE3 포트인터페이스 VRF BR1 |
 | 2 | BGW1 | `show ip bgp summary` | PE3(10.0.60.0, AS 65000)가 **Established**, State/PfxRcd가 숫자(DC1, DC2 경로) | AS 번호, PE3 쪽 이웃 설정 |
 | 3 | PE3 | `show ip bgp vpnv4 vrf BR1 summary` | BGW1(10.0.60.1), BGW2(10.0.60.3)가 AS 65020, **Established**, PfxRcd 2 (192.168.50.0, 192.168.60.0) | 같은 점검 |
 | 4 | BGW1 | `show ip bgp neighbors 10.0.60.0 \| include hold` | `hold time is 9, keepalive interval is 3 seconds` | 양쪽 `timers 3 9` |

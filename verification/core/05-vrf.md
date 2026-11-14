@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | 1 | PE1 | `show ip vrf` | TENANT-A(RD 65000:1)와 소속 인터페이스(Gi2/0, Gi5/0) | `rd` 입력, `ip vrf forwarding` |
 | 2 | PE2 | `show ip vrf` | PARTNER(RD 65000:2)와 Gi2/0, Gi3/0 소속 | 같은 점검 |
-| 3 | PE3 | `show ip vrf` | BR1(RD 65000:3)과 Gi2/0.100, Gi3/0.100 소속 | 같은 점검 |
+| 3 | PE3 | `show ip vrf` | BR1(RD 65000:3)과 Gi2/0, Gi3/0 소속 | 같은 점검 |
 | 4 | PE1~PE3 | `show ip vrf detail` | Export RT는 TENANT-A 65000:1, PARTNER 65000:2, BR1 65000:3. Import RT는 TENANT-A가 65000:1과 65000:3, PARTNER가 65000:2와 65000:3, BR1이 65000:1, 65000:2, 65000:3 | `route-target export`, `route-target import` |
 | 5 | PE1~PE3 | `show ip vrf interfaces` | VRF 링크의 IP와 VRF 이름, Protocol up | [인터페이스 IP 검증](02-interface-ip.md) |
 

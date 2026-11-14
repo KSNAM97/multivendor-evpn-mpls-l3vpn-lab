@@ -36,14 +36,9 @@ interface loopback 0
     ip address 10.0.0.32 255.255.255.255
 !
 interface gigabitethernet 0/0
-    description PE3 to Gi3/0
-    no ip address
-    no shutdown
-!
-interface gigabitethernet 0/0.100
-    description PE3 Gi3/0.100 (VRF BR1)
-    encapsulation dot1q 100
+    description PE3 Gi3/0
     ip address 10.0.60.3 255.255.255.254
+    no shutdown
 !
 interface gigabitethernet 1/0
     description DSW2 to Gi0/0

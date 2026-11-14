@@ -60,8 +60,8 @@ GNS3 어댑터 수(관리 포함): spine 7, leaf1/leaf2 6, leaf3/leaf4 9, border
 | PE2 | Gi1/0 | W (코어) | PE3 | Gi1/0 |
 | PE2 | Gi2/0 | O (PE-CE, VRF PARTNER) | CX1 (Aruba) | 1/1/1 |
 | PE2 | Gi3/0 | O (PE-CE, VRF PARTNER) | CX2 (Aruba) | 1/1/1 |
-| PE3 | Gi2/0 (.100 서브인터페이스, VRF BR1) | O (PE-CE) | BGW1 | Gi0/0 (.100) |
-| PE3 | Gi3/0 (.100 서브인터페이스, VRF BR1) | O (PE-CE) | BGW2 | Gi0/0 (.100) |
+| PE3 | Gi2/0 (VRF BR1) | O (PE-CE) | BGW1 | Gi0/0 |
+| PE3 | Gi3/0 (VRF BR1) | O (PE-CE) | BGW2 | Gi0/0 |
 | Hub1 | Gi1/0 | O | border-leaf1 (Arista) | Et1 |
 | Hub2 | Gi1/0 | O | border-leaf2 (Arista) | Et1 |
 | BGW1 | Gi1/0 | S | DSW1 | Gi0/0 |

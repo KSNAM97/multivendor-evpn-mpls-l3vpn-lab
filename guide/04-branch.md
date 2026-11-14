@@ -20,7 +20,7 @@ Arista 3대(spine1, border-leaf1, border-leaf2), Hub1, Hub2, PE1, PE2, PE3, BGW1
 | 2 | DSW, ASW1 L2: VLAN, RSTP(rapid-pvst), EtherChannel (ASW1은 L2 전용, SVI 없음) | [기준](../baseline/br/04-mstp-etherchannel.md), [샘플](../samples/br/04-mstp-etherchannel.md) | [검증](../verification/br/04-mstp-etherchannel.md) |
 | 3 | SVI와 VRRP (DSW1, DSW2) | [기준](../baseline/br/05-vrrp-svi.md), [샘플](../samples/br/05-vrrp-svi.md) | [검증](../verification/br/05-vrrp-svi.md) |
 | 4 | Branch OSPF: BGW와 DSW를 area 0으로 (BGW `Gi0/0`은 제외) | [기준](../baseline/br/06-ospf-branch.md), [샘플](../samples/br/06-ospf-branch.md) | [검증](../verification/br/06-ospf-branch.md): BGW에서 DSW가 FULL |
-| 5 | PE3의 VRF BR1과 BGW eBGP (`.100` 서브인터페이스), BGW의 OSPF default | [기준](../baseline/br/07-pe3-bgw-ebgp.md), [샘플](../samples/br/07-pe3-bgw-ebgp.md), PE3 쪽은 [코어 PE-CE 샘플](../samples/core/07-pe-ce-ebgp.md) | [검증](../verification/br/07-pe3-bgw-ebgp.md), [코어 PE-CE 검증](../verification/core/07-pe-ce-ebgp.md): PE3 이웃 Established, DSW에 default |
+| 5 | PE3의 VRF BR1과 BGW eBGP, BGW의 OSPF default | [기준](../baseline/br/07-pe3-bgw-ebgp.md), [샘플](../samples/br/07-pe3-bgw-ebgp.md), PE3 쪽은 [코어 PE-CE 샘플](../samples/core/07-pe-ce-ebgp.md) | [검증](../verification/br/07-pe3-bgw-ebgp.md), [코어 PE-CE 검증](../verification/core/07-pe-ce-ebgp.md): PE3 이웃 Established, DSW에 default |
 | 6 | 통신 확인 | [연결 확인](../samples/host/04-connectivity.md) | Host F ↔ Host A, Host F ↔ Host E ping, Host A ↔ Host E는 통신 안 됨 |
 | 7 | 저장 | `write memory`, 컨피그를 `configs/br/`에 보관 | |
 

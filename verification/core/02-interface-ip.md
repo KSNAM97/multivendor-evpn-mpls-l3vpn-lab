@@ -62,16 +62,16 @@ show ip interface gigabitethernet 3/0 | include Internet address|VPN Routing|MTU
 | loopback0 | 10.0.0.13/32 | global | - | - |
 | gigabitethernet0/0 | 10.0.10.3/31 | global | PE1 Gi1/0 | 10.0.10.2 |
 | gigabitethernet1/0 | 10.0.10.5/31 | global | PE2 Gi1/0 | 10.0.10.4 |
-| gigabitethernet2/0.100 | 10.0.60.0/31 | BR1 | BGW1 Gi0/0.100 | 10.0.60.1 |
-| gigabitethernet3/0.100 | 10.0.60.2/31 | BR1 | BGW2 Gi0/0.100 | 10.0.60.3 |
+| gigabitethernet2/0 | 10.0.60.0/31 | BR1 | BGW1 Gi0/0 | 10.0.60.1 |
+| gigabitethernet3/0 | 10.0.60.2/31 | BR1 | BGW2 Gi0/0 | 10.0.60.3 |
 
 ```
 show ip interface brief
 show ip vrf interfaces
 ping 10.0.10.2
 ping 10.0.10.4
-show ip interface gigabitethernet 2/0.100 | include Internet address|VPN Routing|MTU
-show ip interface gigabitethernet 3/0.100 | include Internet address|VPN Routing|MTU
+show ip interface gigabitethernet 2/0 | include Internet address|VPN Routing|MTU
+show ip interface gigabitethernet 3/0 | include Internet address|VPN Routing|MTU
 ```
 
 ## 확인 범위
@@ -115,15 +115,22 @@ show ip interface gigabitethernet 3/0.100 | include Internet address|VPN Routing
 
 ### PE3
 
-- `show ip interface brief`: loopback0 10.0.0.13, Gi0/0 10.0.10.3(PE1), Gi1/0 10.0.10.5(PE2), 서브인터페이스 Gi2/0.100 10.0.60.0(BGW1), Gi3/0.100 10.0.60.2(BGW2), 관리 Gi6/0 10.9.1.13이 up/up. 물리 Gi2/0, Gi3/0에는 IP가 없음(unassigned, up/up)
-- `show ip vrf interfaces`: Gi2/0.100, Gi3/0.100이 BR1, Gi6/0이 MGMT
-- `ping 10.0.10.2`(PE1) 5/5(16/36/60ms), `ping 10.0.10.4`(PE2) 5/5(28/44/64ms)
-- `show ip interface gigabitethernet 2/0.100`, `3/0.100`: 10.0.60.0/31, 10.0.60.2/31, MTU 1500, VRF BR1. 코어 링크 `Gi0/0`은 MTU 4470
-- PE3만 서브인터페이스를 쓰는 점: PE1(Hub), PE2(CX)의 PE-CE 링크는 물리 포트에 주소와 VRF를 바로 주지만, PE3의 BGW 링크는 물리 포트에 IP를 두지 않고 dot1q 100 서브인터페이스(`.100`)에 주소와 VRF BR1을 줌. BGW 쪽도 `Gi0/0.100`으로 같음([PE3 - BGW eBGP](../../baseline/br/07-pe3-bgw-ebgp.md))
+- `show ip interface brief`: loopback0 10.0.0.13, Gi0/0 10.0.10.3(PE1), Gi1/0 10.0.10.5(PE2), Gi2/0 10.0.60.0(BGW1), Gi3/0 10.0.60.2(BGW2), 관리 Gi6/0 10.9.1.13이 up/up. 서브인터페이스 `Gi2/0.100`, `Gi3/0.100`이 `deleted`로 보이는 것은 삭제한 서브인터페이스를 IOS가 재부팅 전까지 목록에 남기는 표시
+- `show ip vrf interfaces`: Gi2/0, Gi3/0이 BR1, Gi6/0이 MGMT
+- PE3의 BGW 링크는 PE1(Hub), PE2(CX)와 같이 물리 포트에 주소와 VRF를 직접 줌. 처음에는 dot1q 100 서브인터페이스(`.100`)로 구성했으나 쓸 이유가 없어 2026-11-14에 물리 포트로 통일(BGW1·2 `Gi0/0`도 같음)
+- 변경 뒤 확인: PE3 BGP 이웃 BGW1(10.0.60.1), BGW2(10.0.60.3) Established, BGW1·2의 PE3 이웃 Established, Host F -> Host A ping 4/4(TTL 57). BGP Up/Down이 약 6시간으로 이어져 세션은 끊기지 않았음
 
 ![PE3 인터페이스 IP](images/02-interface-ip/pe3-interface-ip.png)
 
-![PE3 서브인터페이스](images/02-interface-ip/pe3-subinterfaces.png)
+![PE3 VRF 인터페이스](images/02-interface-ip/pe3-vrf-interfaces.png)
+
+![PE3 BGP](images/02-interface-ip/pe3-bgp-summary-after.png)
+
+![BGW1 BGP](images/02-interface-ip/bgw1-bgp-summary-after.png)
+
+![BGW2 BGP](images/02-interface-ip/bgw2-bgp-summary-after.png)
+
+![Host F ping](images/02-interface-ip/host-f-ping-after.png)
 
 ![PE3 Gi0/0 MTU](images/02-interface-ip/pe3-gi0-mtu.png)
 

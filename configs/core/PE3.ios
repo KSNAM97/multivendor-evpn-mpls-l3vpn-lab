@@ -52,26 +52,16 @@ interface gigabitethernet 1/0
     no shutdown
 !
 interface gigabitethernet 2/0
-    description BGW1 to Gi0/0
-    no ip address
-    no shutdown
-!
-interface gigabitethernet 2/0.100
-    description BGW1 Gi0/0.100 (VRF BR1)
-    encapsulation dot1q 100
+    description BGW1 Gi0/0 (VRF BR1)
     ip vrf forwarding BR1
     ip address 10.0.60.0 255.255.255.254
-!
-interface gigabitethernet 3/0
-    description BGW2 to Gi0/0
-    no ip address
     no shutdown
 !
-interface gigabitethernet 3/0.100
-    description BGW2 Gi0/0.100 (VRF BR1)
-    encapsulation dot1q 100
+interface gigabitethernet 3/0
+    description BGW2 Gi0/0 (VRF BR1)
     ip vrf forwarding BR1
     ip address 10.0.60.2 255.255.255.254
+    no shutdown
 !
 router ospf 1
     router-id 10.0.0.13

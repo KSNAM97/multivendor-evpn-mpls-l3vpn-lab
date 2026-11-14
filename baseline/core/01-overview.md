@@ -26,8 +26,8 @@
 | PE2 | Gi1/0 | W (코어) | PE3 | Gi1/0 |
 | PE2 | Gi2/0 | O (PE-CE, VRF PARTNER) | CX1 (Aruba) | 1/1/1 |
 | PE2 | Gi3/0 | O (PE-CE, VRF PARTNER) | CX2 (Aruba) | 1/1/1 |
-| PE3 | Gi2/0.100 | O (PE-CE, VRF BR1) | BGW1 | Gi0/0.100 |
-| PE3 | Gi3/0.100 | O (PE-CE, VRF BR1) | BGW2 | Gi0/0.100 |
+| PE3 | Gi2/0 | O (PE-CE, VRF BR1) | BGW1 | Gi0/0 |
+| PE3 | Gi3/0 | O (PE-CE, VRF BR1) | BGW2 | Gi0/0 |
 
 c7200 슬롯 구성: `slot0 = C7200-IO-GE-E (Gi0/0)`, `slot1~5 = PA-GE`. 관리 포트가 없으므로 GNS3 콘솔로 접속
 
@@ -48,8 +48,8 @@ c7200 슬롯 구성: `slot0 = C7200-IO-GE-E (Gi0/0)`, `slot1~5 = PA-GE`. 관리 
 | PE2 - CX2 | 10.0.20.6/31 | PE2 .6 | CX2 .7 | PARTNER |
 | PE1 - Hub1 | 10.0.30.0/31 | PE1 .0 | Hub1 .1 | TENANT-A |
 | PE1 - Hub2 | 10.0.30.2/31 | PE1 .2 | Hub2 .3 | TENANT-A |
-| PE3 - BGW1 | 10.0.60.0/31 | PE3 .0 | BGW1 .1 | BR1 (`.100` 서브인터페이스) |
-| PE3 - BGW2 | 10.0.60.2/31 | PE3 .2 | BGW2 .3 | BR1 (`.100` 서브인터페이스) |
+| PE3 - BGW1 | 10.0.60.0/31 | PE3 .0 | BGW1 .1 | BR1 |
+| PE3 - BGW2 | 10.0.60.2/31 | PE3 .2 | BGW2 .3 | BR1 |
 
 ## 7. 확인이 필요한 항목
 

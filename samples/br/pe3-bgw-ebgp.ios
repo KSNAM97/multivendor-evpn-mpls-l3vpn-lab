@@ -1,18 +1,14 @@
 ! Cisco IOS (c7200) - PE3 - BGW eBGP (VRF BR1) 샘플 (BGW1, BGW2)
 ! 확인: show ip bgp summary / show ip bgp neighbors 10.0.60.0 | include hold / show ip bgp neighbors 10.0.60.0 advertised-routes
 ! 장비마다 값만 다르다
-!   BGW1 router-id 10.0.1.31, Gi0/0.100 10.0.60.1/31, PE3 이웃 10.0.60.0 (PE3 Gi2/0.100)
-!   BGW2 router-id 10.0.1.32, Gi0/0.100 10.0.60.3/31, PE3 이웃 10.0.60.2 (PE3 Gi3/0.100)
+!   BGW1 router-id 10.0.1.31, Gi0/0 10.0.60.1/31, PE3 이웃 10.0.60.0 (PE3 Gi2/0)
+!   BGW2 router-id 10.0.1.32, Gi0/0 10.0.60.3/31, PE3 이웃 10.0.60.2 (PE3 Gi3/0)
 ! BGW는 자기 대역(192.168.50.0/24, 60.0/24)만 PE3로 광고한다 (DC1과 DC2가 BR1을 거쳐 서로 통신하지 않게 함)
 !
 ! [BGW1] (BGW2는 router-id 10.0.1.32, 주소 10.0.60.3, 이웃 10.0.60.2)
 interface gigabitethernet 0/0
-    no ip address
-    no shutdown
-!
-interface gigabitethernet 0/0.100
-    encapsulation dot1q 100
     ip address 10.0.60.1 255.255.255.254
+    no shutdown
 !
 ip prefix-list BR-TO-PARTNER seq 5 permit 192.168.50.0/24
 ip prefix-list BR-TO-PARTNER seq 10 permit 192.168.60.0/24

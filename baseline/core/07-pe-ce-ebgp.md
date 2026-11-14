@@ -14,11 +14,11 @@ PE가 DC와 Branch 쪽 장비와 경로를 교환하는 부분. 모든 구역이
 | PE1 | Hub2 | 65010 | 10.0.30.2/31 (PE1 .2, Hub2 .3)         | TENANT-A |
 | PE2 | CX1  | 65201 | 10.0.20.4/31 (PE2 .4, CX1 .5)          | PARTNER  |
 | PE2 | CX2  | 65201 | 10.0.20.6/31 (PE2 .6, CX2 .7)          | PARTNER  |
-| PE3 | BGW1 | 65020 | 10.0.60.0/31 (PE3 .0, BGW1 .1, `.100`) | BR1      |
-| PE3 | BGW2 | 65020 | 10.0.60.2/31 (PE3 .2, BGW2 .3, `.100`) | BR1      |
+| PE3 | BGW1 | 65020 | 10.0.60.0/31 (PE3 .0, BGW1 .1) | BR1      |
+| PE3 | BGW2 | 65020 | 10.0.60.2/31 (PE3 .2, BGW2 .3) | BR1      |
 
 - DC1은 border-leaf1이 Hub1, border-leaf2가 Hub2에 각각 연결되어 있고(1대1), Hub가 PE1과 eBGP를 맺음. border leaf와 Hub 사이도 eBGP ([DC1 Hub eBGP](../dc1/06-dci-hub-ebgp.md))
-- Branch는 BGW가 고객사 망 끝단(CE)이고, PE3와 BGW 사이는 물리 포트 하나에 dot1q 100 서브인터페이스를 만들어 VRF BR1에 넣음
+- Branch는 BGW가 고객사 망 끝단(CE)이고, PE3와 BGW 사이는 물리 포트에 주소를 직접 주고 VRF BR1에 넣음
 - PE1은 Hub 2대, PE2는 CX 2대, PE3는 BGW 2대와 각각 `maximum-paths 2`로 ECMP
 
 ### 경로 흐름

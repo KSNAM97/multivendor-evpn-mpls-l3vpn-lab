@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | 1 | PE1 | `show bgp vpnv4 unicast vrf TENANT-A summary` | Hub1(10.0.30.1), Hub2(10.0.30.3)가 AS 65010, **Established**, State/PfxRcd가 숫자 | 링크 IP, AS 번호, Hub 쪽 `neighbor 10.0.30.0`(Hub1), `10.0.30.2`(Hub2) |
 | 2 | PE2 | `show bgp vpnv4 unicast vrf PARTNER summary` | CX1(10.0.20.5), CX2(10.0.20.7)가 AS 65201, **Established** | 링크 IP, CX 쪽 `router bgp 65201` |
-| 3 | PE3 | `show ip bgp vpnv4 vrf BR1 summary` | BGW1(10.0.60.1), BGW2(10.0.60.3)가 AS 65020, **Established**, PfxRcd 2(192.168.50.0, 192.168.60.0) | `.100` 서브인터페이스, BGW 쪽 `router bgp 65020` |
+| 3 | PE3 | `show ip bgp vpnv4 vrf BR1 summary` | BGW1(10.0.60.1), BGW2(10.0.60.3)가 AS 65020, **Established**, PfxRcd 2(192.168.50.0, 192.168.60.0) | PE3 `Gi2/0`·`Gi3/0` 주소와 VRF, BGW 쪽 `router bgp 65020` |
 | 4 | PE1 | `show ip route vrf TENANT-A 192.168.50.0` | BGP(내부) 경로, next hop 10.0.0.13(PE3) | PE3 VRF BR1 export RT 65000:3, PE1 TENANT-A import RT 65000:3 |
 | 5 | PE1 | `show bgp vpnv4 unicast all labels` | RD 65000:3의 192.168.50.0, 192.168.60.0이 next hop 10.0.0.13, `nolabel/26`, `nolabel/27` | VPNv4 세션(PE1 - PE3) |
 | 6 | PE2 | `show ip route vrf PARTNER` | 192.168.110.0/24(CX 경유)와 BR1 경로(192.168.50.0, 192.168.60.0) 보임. DC1 경로(192.168.10.0)는 **없음** | PARTNER import RT에 65000:1이 없어야 함 |

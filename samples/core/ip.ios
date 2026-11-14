@@ -1,6 +1,6 @@
 ! Cisco IOS (c7200) - 인터페이스 IP 샘플 (PE1 기준, 값은 문서의 IP 표 기준)
 ! 확인: show ip interface brief / show ip vrf interfaces
-! PE2는 VRF PARTNER(Gi2/0 10.0.20.4, Gi3/0 10.0.20.6), PE3는 VRF BR1(Gi2/0.100 10.0.60.0, Gi3/0.100 10.0.60.2)
+! PE2는 VRF PARTNER(Gi2/0 10.0.20.4, Gi3/0 10.0.20.6), PE3는 VRF BR1(Gi2/0 10.0.60.0, Gi3/0 10.0.60.2)
 ! 값은 07-ip-port-matrix.md의 IP와 VRF로 바꾼다
 !
 ! VRF 이름만 먼저 만든다 (rd와 route-target은 05 VRF 단계에서 추가)
@@ -33,12 +33,9 @@ interface gigabitethernet 5/0
     ip address 10.0.30.2 255.255.255.254
     no shutdown
 !
-! [PE3] BGW와는 물리 포트(IP 없음)에 dot1q 100 서브인터페이스를 만들어 VRF BR1에 넣는다
+! [PE3] BGW와는 물리 포트에 VRF BR1과 주소를 직접 준다(PE1-Hub, PE2-CX와 같은 방식)
 ! interface gigabitethernet 2/0
-!     no ip address
-!     no shutdown
-! interface gigabitethernet 2/0.100
-!     encapsulation dot1q 100
 !     ip vrf forwarding BR1
 !     ip address 10.0.60.0 255.255.255.254
+!     no shutdown
 !

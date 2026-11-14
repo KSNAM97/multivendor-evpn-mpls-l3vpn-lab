@@ -26,7 +26,7 @@
 | ------- | ----------------------- | --------------- | ------------ |
 | PE1     | Gi2/0, Gi5/0            | TENANT-A        | Hub1, Hub2   |
 | PE2     | Gi2/0, Gi3/0            | PARTNER         | CX1, CX2     |
-| PE3     | Gi2/0.100, Gi3/0.100    | BR1             | BGW1, BGW2   |
+| PE3     | Gi2/0, Gi3/0    | BR1             | BGW1, BGW2   |
 | PE1~PE3 | Gi0/0, Gi1/0, loopback0 | global (VRF 없음) | 코어           |
 
 ## 작성 규칙
