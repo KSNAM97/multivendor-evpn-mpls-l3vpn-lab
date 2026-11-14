@@ -24,7 +24,7 @@
 | loopback0 | 10.0.0.11/32 | global | - | - |
 | gigabitethernet0/0 | 10.0.10.0/31 | global | PE2 Gi0/0 | 10.0.10.1 |
 | gigabitethernet1/0 | 10.0.10.2/31 | global | PE3 Gi0/0 | 10.0.10.3 |
-| gigabitethernet4/0 | 10.0.30.0/31 | TENANT-A | Hub1 Gi0/0 | 10.0.30.1 |
+| gigabitethernet2/0 | 10.0.30.0/31 | TENANT-A | Hub1 Gi0/0 | 10.0.30.1 |
 | gigabitethernet5/0 | 10.0.30.2/31 | TENANT-A | Hub2 Gi0/0 | 10.0.30.3 |
 
 ```
