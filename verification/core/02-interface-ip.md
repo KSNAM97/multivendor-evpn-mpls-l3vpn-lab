@@ -13,7 +13,7 @@
 | 3 | `show running-config interface gigabitethernet 0/0` | 한 인터페이스의 설정 원문 (포트마다 반복) |
 | 4 | `show ip vrf` | 정의된 VRF 이름 (rd는 VPNv4 단계 전이라 `<not set>`) |
 | 5 | `ping <상대 IP>` | global 링크 도달성 |
-| 6 | `ping vrf <VRF 이름> <상대 IP>` | VRF 링크 도달성 (상대 장비 설정 후) |
+| 6 | `show ip interface <인터페이스> \| include Internet address\|VPN Routing\|MTU` | VRF 소속, IP, MTU (이 랩에서는 `ping vrf`를 쓰지 않음. PE-CE 링크 도달성은 eBGP 이웃으로 확인) |
 
 `show ip interface brief`는 VRF에 속한 인터페이스도 IP를 보여주지만 VRF 이름은 보여주지 않음. VRF 소속은 `show ip vrf interfaces`로 확인함
 
@@ -32,8 +32,8 @@ show ip interface brief
 show ip vrf interfaces
 ping 10.0.10.1
 ping 10.0.10.3
-ping vrf TENANT-A 10.0.30.1
-ping vrf TENANT-A 10.0.30.3
+show ip interface gigabitethernet 2/0 | include Internet address|VPN Routing|MTU
+show ip interface gigabitethernet 5/0 | include Internet address|VPN Routing|MTU
 ```
 
 ## PE2
@@ -51,8 +51,8 @@ show ip interface brief
 show ip vrf interfaces
 ping 10.0.10.0
 ping 10.0.10.5
-ping vrf PARTNER 10.0.20.5
-ping vrf PARTNER 10.0.20.7
+show ip interface gigabitethernet 2/0 | include Internet address|VPN Routing|MTU
+show ip interface gigabitethernet 3/0 | include Internet address|VPN Routing|MTU
 ```
 
 ## PE3
@@ -70,8 +70,8 @@ show ip interface brief
 show ip vrf interfaces
 ping 10.0.10.2
 ping 10.0.10.4
-ping vrf BR1 10.0.60.1
-ping vrf BR1 10.0.60.3
+show ip interface gigabitethernet 2/0.100 | include Internet address|VPN Routing|MTU
+show ip interface gigabitethernet 3/0.100 | include Internet address|VPN Routing|MTU
 ```
 
 ## 확인 범위
@@ -83,31 +83,49 @@ ping vrf BR1 10.0.60.3
 | PE2 - CX1, CX2 (PARTNER) | CX1, CX2의 1/1/1 설정 후 |
 | PE3 - BGW1, BGW2 (BR1) | BGW 설정 후 |
 
-## 증빙
+## 증빙 (2026-11-14, 최종 구성)
 
 ### PE1
 
-`show ip interface brief`, `show ip vrf interfaces`, `show ip vrf`, `show running-config interface gigabitethernet 0/0` 출력
-- 이 화면은 이전 구성(leaf 직결, WAN-UL)에서 찍은 것. 최종 구성은 Gi0/0, Gi1/0, Gi2/0, Gi5/0만 사용하고 Gi2/0, Gi5/0은 VRF TENANT-A 소속(Hub1, Hub2). Gi2/0, Gi3/0, Gi6/0은 미사용
-- 최종 구성 화면으로 교체 필요
+- `show ip interface brief`: loopback0 10.0.0.11, Gi0/0 10.0.10.0(PE2), Gi1/0 10.0.10.2(PE3), Gi2/0 10.0.30.0(Hub1), Gi5/0 10.0.30.2(Hub2), 관리 Gi6/0 10.9.1.11이 up/up. Gi3/0, Gi4/0은 미사용(administratively down)
+- `show ip vrf interfaces`: Gi2/0, Gi5/0이 TENANT-A, Gi6/0이 MGMT
+- `ping 10.0.10.1` 5/5(4/26/36ms), `ping 10.0.10.3` 5/5(24/28/32ms)
+- `show ip interface gigabitethernet 2/0`, `5/0`: 10.0.30.0/31, 10.0.30.2/31, MTU 1500, VRF TENANT-A. 코어 링크 `Gi0/0`은 MTU 4470([MTU 검증](../dc1/11-mtu.md))
 
 ![PE1 인터페이스 IP](images/02-interface-ip/pe1-interface-ip.png)
 
+![PE1 VRF 인터페이스](images/02-interface-ip/pe1-vrf-interfaces.png)
+
+![PE1 Gi0/0 MTU](images/02-interface-ip/pe1-gi0-mtu.png)
+
 ### PE2
 
-- Gi0/0 10.0.10.1, Gi1/0 10.0.10.4, Gi2/0 10.0.20.4, Gi3/0 10.0.20.6이 up/up, loopback0 10.0.0.12
-- 최종 구성에서는 VRF PARTNER에 Gi2/0, Gi3/0이 소속(화면은 이전 이름 TENANT-A로 찍힘, 교체 필요)
-- Gi4/0 ~ Gi6/0은 미사용
+- `show ip interface brief`: loopback0 10.0.0.12, Gi0/0 10.0.10.1(PE1), Gi1/0 10.0.10.4(PE3), Gi2/0 10.0.20.4(CX1), Gi3/0 10.0.20.6(CX2), 관리 Gi6/0 10.9.1.12가 up/up
+- `show ip vrf interfaces`: Gi2/0, Gi3/0이 PARTNER, Gi6/0이 MGMT
+- `ping 10.0.10.0`(PE1) 5/5(32/44/64ms), `ping 10.0.10.5`(PE3) 5/5(32/56/68ms)
+- `show ip interface gigabitethernet 2/0`, `3/0`: 10.0.20.4/31, 10.0.20.6/31, MTU 1500, VRF PARTNER. 코어 링크 `Gi0/0`은 MTU 4470
 
 ![PE2 인터페이스 IP](images/02-interface-ip/pe2-interface-ip.png)
 
+![PE2 ping](images/02-interface-ip/pe2-ping.png)
+
+![PE2 VRF 인터페이스](images/02-interface-ip/pe2-vrf-interfaces.png)
+
+![PE2 Gi0/0 MTU](images/02-interface-ip/pe2-gi0-mtu.png)
+
 ### PE3
 
-- Gi0/0 10.0.10.3, Gi1/0 10.0.10.5가 up/up, loopback0 10.0.0.13
-- 이 화면은 이전 구성(WAN-UL)에서 찍은 것. 최종 구성은 VRF BR1에 Gi2/0.100(10.0.60.0), Gi3/0.100(10.0.60.2)이 소속. 화면 교체 필요
-- Gi4/0 ~ Gi6/0은 미사용
+- `show ip interface brief`: loopback0 10.0.0.13, Gi0/0 10.0.10.3(PE1), Gi1/0 10.0.10.5(PE2), 서브인터페이스 Gi2/0.100 10.0.60.0(BGW1), Gi3/0.100 10.0.60.2(BGW2), 관리 Gi6/0 10.9.1.13이 up/up. 물리 Gi2/0, Gi3/0에는 IP가 없음(unassigned, up/up)
+- `show ip vrf interfaces`: Gi2/0.100, Gi3/0.100이 BR1, Gi6/0이 MGMT
+- `ping 10.0.10.2`(PE1) 5/5(16/36/60ms), `ping 10.0.10.4`(PE2) 5/5(28/44/64ms)
+- `show ip interface gigabitethernet 2/0.100`, `3/0.100`: 10.0.60.0/31, 10.0.60.2/31, MTU 1500, VRF BR1. 코어 링크 `Gi0/0`은 MTU 4470
+- PE3만 서브인터페이스를 쓰는 점: PE1(Hub), PE2(CX)의 PE-CE 링크는 물리 포트에 주소와 VRF를 바로 주지만, PE3의 BGW 링크는 물리 포트에 IP를 두지 않고 dot1q 100 서브인터페이스(`.100`)에 주소와 VRF BR1을 줌. BGW 쪽도 `Gi0/0.100`으로 같음([PE3 - BGW eBGP](../../baseline/br/07-pe3-bgw-ebgp.md))
 
 ![PE3 인터페이스 IP](images/02-interface-ip/pe3-interface-ip.png)
+
+![PE3 서브인터페이스](images/02-interface-ip/pe3-subinterfaces.png)
+
+![PE3 Gi0/0 MTU](images/02-interface-ip/pe3-gi0-mtu.png)
 
 ## 결과 기록
 
@@ -116,3 +134,4 @@ ping vrf BR1 10.0.60.3
 | 2026-10-22 | PE1 | 성공 | IP, VRF 소속, description 문서와 일치. ping은 아직 미실시 |
 | 2026-10-22 | PE2 | 성공 | 상동 |
 | 2026-10-22 | PE3 | 성공 | 상동 |
+| 2026-11-14 | PE1~PE3 | 성공 | 최종 구성(VRF TENANT-A, PARTNER, BR1, MGMT)에서 IP, VRF 소속, PE 간 ping 5/5 재확인. 이전 구성 화면은 교체함 |

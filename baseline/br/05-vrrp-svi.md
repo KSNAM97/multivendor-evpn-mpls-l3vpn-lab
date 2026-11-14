@@ -12,4 +12,4 @@ Branch LAN의 기본 게이트웨이를 DSW 두 대로 이중화
 - VRRP는 RFC 5798 표준이고 preempt를 켬.
 - STP(rapid-pvst) root와 VRRP master를 같은 DSW로 맞춰 경로가 꼬이지 않게 함
 
-- DSW1·DSW2의 SVI vlan 50·60은 `ip mtu 1400`과 `ip tcp adjust-mss 1360`(1400 - IP 20 - TCP 20)
+- DSW1·DSW2의 SVI vlan 50·60은 `ip mtu 1400`. `ip tcp adjust-mss 1360`(1400 - IP 20 - TCP 20)은 설계값이지만 running-config에서 확인되지 않아 적용을 확인하지 못함([MTU 검증](../../verification/dc1/11-mtu.md))
